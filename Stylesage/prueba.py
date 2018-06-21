@@ -1,6 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn import preprocessing
+import datetime as dt
 
 
 def read_data():
@@ -187,11 +188,11 @@ def count_click_intervals(database):
 
     lenght = database.shape[0]
 
-    first = len(database[(train_mod.click_count >=0) & (train_mod.click_count < 10)])
-    second = len(database[(train_mod.click_count >=10) & (train_mod.click_count < 20)])
-    third = len(database[(train_mod.click_count >=20) & (train_mod.click_count < 50)])
-    fouth = len(database[(train_mod.click_count >=50) & (train_mod.click_count < 1000)])
-    fifth = len(database[(train_mod.click_count >=1000)])
+    first = len(database[(database.click_count >=0) & (database.click_count < 10)])
+    second = len(database[(database.click_count >=10) & (database.click_count < 20)])
+    third = len(database[(database.click_count >=20) & (database.click_count < 50)])
+    fouth = len(database[(database.click_count >=50) & (database.click_count < 1000)])
+    fifth = len(database[(database.click_count >=1000)])
 
     print('first interval has:', first, first/lenght*100,'%')
     print('second interval has:', second, second/lenght*100,'%')
@@ -207,16 +208,58 @@ def count_click_intervals(database):
 def dummies_labelEncoder(columna):
     le = preprocessing.LabelEncoder()
 
-
     return le.fit_transform(columna)
 
+
+
+def time_to_ordinal(to_convert):
+    # el formato de to_convert tiene que ser: basededatos['columna_fecha']
+    # EJM: data_df['Date'] = pd.to_datetime(data_df['Date'])
+
+    to_convert = pd.to_datetime(to_convert)
+    to_convert = to_convert.map(dt.datetime.toordinal)
+    return to_convert
+
+
+def analizing_train_test_dates(train, test):
+    # Vamos a ver si son las mismas fechas las de train que las de test, en la publicacion tag_id
+    unique_date_train = train_data['date_tag'].unique()
+    unique_date_test = test_data['date_tag'].unique()
+
+    print('longitud', len(unique_date_train) == len(unique_date_test))
+
+    print(unique_date_test,unique_date_train)
+
+
+def save_new_subset(subset,name):
+    subset.to_csv('./' +name+ '.csv', sep=';')
+    return 0
 
 
 
 if __name__ == '__main__':
     train_data, test_data, users_data, products_data = read_data()
-    train_mod, test_mod = read_modified_db()
+    # train_mod, test_mod = read_modified_db()
 
+    # Convertimos las variables categoricas:
+    products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
+    users_data['country'] = dummies_labelEncoder(users_data.country)
+
+    # COnvertimos las fechas de tiempo
+    users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
+
+    # Vamos a probar a pasarle sklearn directamente a los dos de train y test, a ver si salen igual, sino, a mano
+    train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
+    test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
+
+    save_new_subset(products_data, 'products_data_dummies')
+    save_new_subset(users_data,'user_data_dummies')
+
+    save_new_subset(train_data, 'train_data_dummies')
+    save_new_subset(test_data, 'test_data_dummies')
+
+
+    print('hola')
 
     # buscamos_correlacion(train_data, test_data, users_data, products_data)
 
@@ -240,14 +283,14 @@ if __name__ == '__main__':
     # agrupamos(train_mod, 'product_brand')
 
     # COntamos los intervalos de clicks que hay
-    count_click_intervals(train_mod)
+    # count_click_intervals(train_mod)
 
-    train_mod['product_brand'] = dummies_labelEncoder(train_mod.product_brand)
-    train_mod['country'] = dummies_labelEncoder(train_mod.country)
+    # train_mod['product_brand'] = dummies_labelEncoder(train_mod.product_brand)
+    # train_mod['country'] = dummies_labelEncoder(train_mod.country)
 
-    print(train_mod.head)
+    # print(train_mod.head)
 
     #buscamos correlacion
-    print(train_mod[['product_brand','country', 'date_tag', 'date_joined']].describe())
+    # print(train_mod[['product_brand','country', 'date_tag', 'date_joined']].describe())
 
     print('hola')
