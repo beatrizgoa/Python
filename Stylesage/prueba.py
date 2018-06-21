@@ -29,6 +29,23 @@ def read_data():
 
 
 
+def read_modified_db():
+
+    # En esta funcion leemos los archivos de train y test modificados
+
+    path = './Exercise/'
+
+    train_data = pd.read_csv(path+"training_modified.csv",delimiter=';', sep='delimiter')
+    print('-----train data ----')
+    print(train_data.head(), '\n')
+
+    test_data = pd.read_csv(path+"testing_modified.csv",delimiter=';', sep='delimiter')
+    print('-----test data ----')
+    print(test_data.head(), '\n')
+
+    return train_data, test_data
+
+
 
 def check_nulls(train_data, test_data, users_data, products_data):
 
@@ -41,6 +58,8 @@ def check_nulls(train_data, test_data, users_data, products_data):
     product_null = products_data.isnull().sum()
 
     # Se obtiene que es nulo en la descripcion del producto (solo)
+
+    print('train: ', train_null, '\n', 'test: ', test_null, '\n', 'user: ', user_null, '\n', 'product: ', product_null)
 
     return 0
 
@@ -76,10 +95,12 @@ def data_description(train_data, test_data, users_data, products_data):
     return 0
 
 
-def duplicidades(train_data, test_data, users_data, products_data):
+def duplicidades(data, column):
     # vamos a ver las duplicidades
-    duplicated = users_data['country'].duplicated().sum()
+    duplicated = data[column].duplicated().sum()
     print(duplicated)
+
+    return 0
 
 
 def analizamos_fechas(train_data, test_data, users_data, products_data):
@@ -103,16 +124,11 @@ def analizamos_fechas(train_data, test_data, users_data, products_data):
     return 0
 
 
-def agrupamos(train_data, test_data, users_data, products_data):
-
-    train_post_id = train_data.groupby('post_id').count()
-    print('PRINT TRAIN post id:','\n', train_post_id)
-
-    ##  Vamos a ver los likes en funcion de las demas variables
-    likes_tag_id = train_data.groupby('click_count').tag_id.count()
+def agrupamos(database, param):
+    # Funcion para agrupar en funcion de los clicks count
 
     plt.figure()
-    users_date_joined = train_data.groupby('user_id').click_count.count().plot(kind='bar')
+    database.groupby(param).click_count.count().plot(kind='bar')
     plt.show()
 
     return 0
@@ -155,14 +171,65 @@ def add_datasets(train_test_data, users_data, products_data):
 
     return train_test_data
 
+
+
+
+def count_click_intervals(database):
+
+    lenght = database.shape[0]
+
+    first = len(database[(train_mod.click_count >=0) & (train_mod.click_count < 10)])
+    second = len(database[(train_mod.click_count >=10) & (train_mod.click_count < 20)])
+    third = len(database[(train_mod.click_count >=20) & (train_mod.click_count < 50)])
+    fouth = len(database[(train_mod.click_count >=50) & (train_mod.click_count < 1000)])
+    fifth = len(database[(train_mod.click_count >=1000)])
+
+    print('first interval has:', first, first/lenght*100,'%')
+    print('second interval has:', second, second/lenght*100,'%')
+    print('third interval has:', third, third/lenght*100,'%')
+    print('fouth interval has:', fouth, fouth/lenght*100,'%')
+    print('fifth interval has:', fifth, fifth/lenght*100,'%')
+
+    assert (first+second+third+fouth+fifth == lenght)
+    return 0
+
+def convert_to_dummies(columna):
+
+    return pd.get_dummies(columna)
+
 if __name__ == '__main__':
     train_data, test_data, users_data, products_data = read_data()
+    train_mod, test_mod = read_modified_db()
+
+
     # buscamos_correlacion(train_data, test_data, users_data, products_data)
 
-    new_training = add_datasets(train_data,  users_data, products_data)
-    new_testing =  add_datasets(test_data, users_data, products_data)
+    # Creamos los nuevos datasets mezclados
+    # new_training = add_datasets(train_data,  users_data, products_data)
+    # new_testing =  add_datasets(test_data, users_data, products_data)
 
-    new_testing.to_csv('./Exercise/testing_modified.csv', sep=';')
-    new_training.to_csv('./Exercise/training_modified.csv', sep=';')
+    # Los guardamos en csv
+    # new_testing.to_csv('./Exercise/testing_modified.csv', sep=';')
+    # new_training.to_csv('./Exercise/training_modified.csv', sep=';')
+
+    # Con los nuevos datasets mezclados vamos a ver si hay algun valor nulo:
+    # check_nulls(train_data, test_data, users_data, products_data)
+
+    # Duplicidades:
+    # duplicidades(train_data, 'tag_id')
+    # duplicidades(users_data, 'user_id')
+    # duplicidades(products_data, 'product_id')
+
+    # agrupamos
+    # agrupamos(train_mod, 'product_brand')
+
+    print((train_mod == 2).astype(int).sum(axis=0))
+
+    print(len(test_mod['product_brand'].unique()))
+
+    # COntamos los intervalos de clicks que hay
+    count_click_intervals(train_mod)
+
+    # country_dummies = onvert_to_dummies(columna):
 
     print('hola')
