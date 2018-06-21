@@ -11,9 +11,9 @@ def read_data(path = './Exercise/'):
     test = pd.read_csv(path+'test.csv')
 
     print(train.head())
-
-    x = train[['tag_id', 'post_id']]#, 'product_id', 'user_id', 'color']]
-    y = train['click_count']
+    feature_cols = ['tag_id', 'post_id', 'product_id'] #,'product_id', 'user_id', 'color']
+    x = train[feature_cols]
+    y = train.click_count
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
 
@@ -55,9 +55,18 @@ if __name__ == '__main__':
     x_train, x_test, y_train, y_test = read_data()
 
     y_pred_regression = train_predict_regression(x_train, x_test, y_train)
+
+    print('y-train.shape', y_train.shape)
+    print('x-train.shape', x_train.shape)
+    print('y-test.shape', y_test.shape)
+    print('x-test.shape', x_test.shape)
+
+
     y_pred_tree = train_decission_tree(x_train,x_test,y_train)
-    result_reg, accuracy_reg = metrics(y_train, y_pred_regression)
-    result_tree, accuracy_tree = metrics(y_train, y_pred_tree)
+
+    print(y_pred_tree.shape)
+    result_reg, accuracy_reg = metrics(y_test, y_pred_regression)
+    result_tree, accuracy_tree = metrics(y_test, y_pred_tree)
 
     print('Regression results:', result_reg, accuracy_reg)
     print('Dec. Tree results;', result_tree, accuracy_tree)
