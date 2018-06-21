@@ -1,6 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
-
+from sklearn import preprocessing
 
 
 def read_data():
@@ -42,6 +42,8 @@ def read_modified_db():
     test_data = pd.read_csv(path+"testing_modified.csv",delimiter=';', sep='delimiter')
     print('-----test data ----')
     print(test_data.head(), '\n')
+
+    print(train_data[['product_brand','country', 'date_tag', 'date_joined']].describe())
 
     return train_data, test_data
 
@@ -95,12 +97,15 @@ def data_description(train_data, test_data, users_data, products_data):
     return 0
 
 
+
+
 def duplicidades(data, column):
     # vamos a ver las duplicidades
     duplicated = data[column].duplicated().sum()
     print(duplicated)
 
     return 0
+
 
 
 def analizamos_fechas(train_data, test_data, users_data, products_data):
@@ -124,6 +129,7 @@ def analizamos_fechas(train_data, test_data, users_data, products_data):
     return 0
 
 
+
 def agrupamos(database, param):
     # Funcion para agrupar en funcion de los clicks count
 
@@ -134,6 +140,7 @@ def agrupamos(database, param):
     return 0
 
 
+
 def buscamos_correlacion(input_data):
 
     # Se busca correlacion en el entrenamiento
@@ -141,6 +148,8 @@ def buscamos_correlacion(input_data):
     print(correlation)
 
     return 0
+
+
 
 
 def add_datasets(train_test_data, users_data, products_data):
@@ -193,9 +202,16 @@ def count_click_intervals(database):
     assert (first+second+third+fouth+fifth == lenght)
     return 0
 
-def convert_to_dummies(columna):
 
-    return pd.get_dummies(columna)
+
+def dummies_labelEncoder(columna):
+    le = preprocessing.LabelEncoder()
+
+
+    return le.fit_transform(columna)
+
+
+
 
 if __name__ == '__main__':
     train_data, test_data, users_data, products_data = read_data()
@@ -223,13 +239,15 @@ if __name__ == '__main__':
     # agrupamos
     # agrupamos(train_mod, 'product_brand')
 
-    print((train_mod == 2).astype(int).sum(axis=0))
-
-    print(len(test_mod['product_brand'].unique()))
-
     # COntamos los intervalos de clicks que hay
     count_click_intervals(train_mod)
 
-    # country_dummies = onvert_to_dummies(columna):
+    train_mod['product_brand'] = dummies_labelEncoder(train_mod.product_brand)
+    train_mod['country'] = dummies_labelEncoder(train_mod.country)
+
+    print(train_mod.head)
+
+    #buscamos correlacion
+    print(train_mod[['product_brand','country', 'date_tag', 'date_joined']].describe())
 
     print('hola')
