@@ -241,26 +241,6 @@ if __name__ == '__main__':
     train_data, test_data, users_data, products_data = read_data()
     # train_mod, test_mod = read_modified_db()
 
-    # Convertimos las variables categoricas:
-    products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
-    users_data['country'] = dummies_labelEncoder(users_data.country)
-
-    # COnvertimos las fechas de tiempo
-    users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
-
-    # Vamos a probar a pasarle sklearn directamente a los dos de train y test, a ver si salen igual, sino, a mano
-    train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
-    test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
-
-    save_new_subset(products_data, 'products_data_dummies')
-    save_new_subset(users_data,'user_data_dummies')
-
-    save_new_subset(train_data, 'train_data_dummies')
-    save_new_subset(test_data, 'test_data_dummies')
-
-
-    print('hola')
-
     # buscamos_correlacion(train_data, test_data, users_data, products_data)
 
     # Creamos los nuevos datasets mezclados
@@ -292,5 +272,33 @@ if __name__ == '__main__':
 
     #buscamos correlacion
     # print(train_mod[['product_brand','country', 'date_tag', 'date_joined']].describe())
+
+
+    # Convertimos las variables categoricas:
+    products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
+    users_data['country'] = dummies_labelEncoder(users_data.country)
+
+    # COnvertimos las fechas de tiempo
+    users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
+
+    # Vamos a probar a pasarle sklearn directamente a los dos de train y test, a ver si salen igual, sino, a mano
+    train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
+    test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
+
+    save_new_subset(products_data, 'products_data_dummies')
+    save_new_subset(users_data,'user_data_dummies')
+
+    save_new_subset(train_data, 'train_data_dummies')
+    save_new_subset(test_data, 'test_data_dummies')
+
+
+    # Ahora metemos en el conjunto de train y test la marca de productos, el pais de usuario y su fecha de union
+    add_datasets(train_data, users_data, products_data)
+    add_datasets(test_data, users_data, products_data)
+
+    # Guardamos los nuevos train, test en csv
+    save_new_subset(train_data,'trainining_modified_dummies')
+    save_new_subset(test_data,'testing_modified_dummies')
+
 
     print('hola')
