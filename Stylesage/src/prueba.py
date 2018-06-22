@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from src.categorical_to_numerical import *
 from src.load_save_files import *
 from src.merge_datasets import *
-
+from numpy import arange
 
 def check_nulls(train_data, test_data, users_data, products_data):
 
@@ -89,9 +89,9 @@ def agrupamos(database, param):
     # Funcion para agrupar en funcion de los clicks count
     # Se muestra en un diagrama
 
-    plt.figure()
+    plt.figure(1)
     database.groupby(param).click_count.count().plot(kind='bar')
-    plt.show()
+    plt.show(1)
 
     return 0
 
@@ -128,8 +128,29 @@ def count_click_intervals(database):
 
     # Nos aseguramos que tienen el mismo numero de likes y no nos hemos dejado ninguno
     assert (first+second+third+fouth+fifth == lenght)
-    return 0
 
+    x = [first, second, third, fouth, fifth]
+
+    # Analizamos el primero y segundo intervalo mas en detalle
+    intervalos_valores = []
+    for i in range(0,22,2):
+            intervalos_valores.append(len(database[(database.click_count >=i) & (database.click_count < (i+2))]))
+
+
+    plt.figure(2)
+    plt.plot(x)
+    plt.xticks(arange(5), ('0-10', '10-20', '20-50', '50-100', '>1000'))
+    plt.xlabel('click counts')
+
+
+    plt.figure(3)
+    plt.plot(arange(0, 22, step=2),intervalos_valores)
+    plt.xticks(arange(22, step=2))
+    plt.xlabel('click counts')
+
+    plt.show()
+
+    return 0
 
 
 
@@ -173,7 +194,7 @@ if __name__ == '__main__':
     # agrupamos(train_mod, 'product_brand')
 
     # COntamos los intervalos de clicks que hay
-    # count_click_intervals(train_mod)
+    count_click_intervals(train_data)
 
     # train_mod['product_brand'] = dummies_labelEncoder(train_mod.product_brand)
     # train_mod['country'] = dummies_labelEncoder(train_mod.country)
@@ -185,30 +206,30 @@ if __name__ == '__main__':
 
 
     # Convertimos las variables categoricas:
-    products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
-    users_data['country'] = dummies_labelEncoder(users_data.country)
+    # products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
+    # users_data['country'] = dummies_labelEncoder(users_data.country)
 
     # COnvertimos las fechas de tiempo
-    users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
+    # users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
 
     # Vamos a probar a pasarle sklearn directamente a los dos de train y test, a ver si salen igual, sino, a mano
-    train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
-    test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
+    # train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
+    # test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
 
-    save_new_subset(products_data, 'products_data_dummies')
-    save_new_subset(users_data,'user_data_dummies')
+    # save_new_subset(products_data, 'products_data_dummies')
+    # save_new_subset(users_data,'user_data_dummies')
 
-    save_new_subset(train_data, 'train_data_dummies')
-    save_new_subset(test_data, 'test_data_dummies')
+    # save_new_subset(train_data, 'train_data_dummies')
+    # save_new_subset(test_data, 'test_data_dummies')
 
 
     # Ahora metemos en el conjunto de train y test la marca de productos, el pais de usuario y su fecha de union
-    add_datasets(train_data, users_data, products_data)
-    add_datasets(test_data, users_data, products_data)
+    # add_datasets(train_data, users_data, products_data)
+    # add_datasets(test_data, users_data, products_data)
 
     # Guardamos los nuevos train, test en csv
-    save_new_subset(train_data,'trainining_modified_dummies')
-    save_new_subset(test_data,'testing_modified_dummies')
+    # save_new_subset(train_data,'trainining_modified_dummies')
+    # save_new_subset(test_data,'testing_modified_dummies')
 
 
     print('hola')
