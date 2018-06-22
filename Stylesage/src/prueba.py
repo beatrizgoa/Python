@@ -86,13 +86,13 @@ def analizamos_fechas(train_data, test_data, users_data, products_data):
 
 def agrupamos(database, param):
     # Funcion para agrupar en funcion de los clicks count
-    # Se muestra en un diagrama
+    # Se muestra en un diagrama de barras
 
-    plt.figure(1)
-    database.groupby(param).click_count.count().plot(kind='bar')
-    plt.show(1)
+    # plt.figure()
+    agrupamos = database.groupby(param).click_count.count()# .plot(kind='bar')
+    # plt.show()
 
-    return 0
+    return agrupamos
 
 
 
@@ -138,13 +138,13 @@ def count_click_intervals(database):
 
     # Mostramos las distribuciones de muestras
 
-    plt.figure(2)
+    plt.figure(1)
     plt.plot(x)
     plt.xticks(arange(5), ('0-10', '10-20', '20-50', '50-100', '>1000'))
     plt.xlabel('click counts')
 
 
-    plt.figure(3)
+    plt.figure(2)
     plt.plot(arange(0, 22, step=2),intervalos_valores)
     plt.xticks(arange(22, step=2))
     plt.xlabel('click counts')
