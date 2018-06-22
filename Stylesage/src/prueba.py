@@ -1,50 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
-
-
-def read_data():
-
-    # Leemos los datos y mostramos la cabecera para examinarlos
-
-    path = '../assets/'
-
-    train_data = pd.read_csv(path+"train.csv",delimiter=';', sep='delimiter')
-    print('-----train data ----')
-    print(train_data.head(), '\n')
-
-    test_data = pd.read_csv(path+"test.csv",delimiter=';', sep='delimiter')
-    print('-----test data ----')
-    print(test_data.head(), '\n')
-
-    users_data = pd.read_csv(path+"users.csv",delimiter=';', sep='delimiter')
-    print('-----users data ----')
-    print(users_data.head(), '\n')
-
-    products_data = pd.read_csv(path+"products.csv",delimiter=';', sep='delimiter')
-    print('-----products data ----')
-    print(products_data.head(), '\n')
-
-    return train_data, test_data, users_data, products_data
-
-
-
-def read_modified_db():
-
-    # En esta funcion leemos los archivos de train y test modificados
-
-    path = '../assets/'
-
-    train_data = pd.read_csv(path+"training_modified.csv",delimiter=';', sep='delimiter')
-    print('-----train data ----')
-    print(train_data.head(), '\n')
-
-    test_data = pd.read_csv(path+"testing_modified.csv",delimiter=';', sep='delimiter')
-    print('-----test data ----')
-    print(test_data.head(), '\n')
-
-    print(train_data[['product_brand','country', 'date_tag', 'date_joined']].describe())
-
-    return train_data, test_data
+from src.categorical_to_numerical import *
+from src.load_save_files import *
 
 
 
@@ -205,20 +162,17 @@ def count_click_intervals(database):
 
 
 
-
 def analizing_train_test_dates(train, test):
     # Vamos a ver si son las mismas fechas las de train que las de test, en la publicacion tag_id
-    unique_date_train = train_data['date_tag'].unique()
-    unique_date_test = test_data['date_tag'].unique()
+    unique_date_train = train['date_tag'].unique()
+    unique_date_test = test['date_tag'].unique()
 
     print('longitud', len(unique_date_train) == len(unique_date_test))
 
     print(unique_date_test,unique_date_train)
 
 
-def save_new_subset(subset,name):
-    subset.to_csv('../assets/' +name+ '.csv', sep=';')
-    return 0
+
 
 
 

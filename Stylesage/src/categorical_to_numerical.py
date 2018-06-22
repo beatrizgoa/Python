@@ -4,6 +4,7 @@ from sklearn import preprocessing
 
 
 def dummies_labelEncoder(columna):
+    # columna tiene que tener el formato base_de_Datos.categorical_columna
     le = preprocessing.LabelEncoder()
 
     return le.fit_transform(columna)
