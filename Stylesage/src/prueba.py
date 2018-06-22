@@ -1,8 +1,7 @@
-import pandas as pd
 from matplotlib import pyplot as plt
 from src.categorical_to_numerical import *
 from src.load_save_files import *
-from src.load_save_files import *
+from src.merge_datasets import *
 
 
 def check_nulls(train_data, test_data, users_data, products_data):
@@ -56,7 +55,7 @@ def data_description(train_data, test_data, users_data, products_data):
 
 
 def duplicidades(data, column):
-    # vamos a ver las duplicidades
+    # vamos a ver las duplicidades para una columna especifica en la base de datos data
     duplicated = data[column].duplicated().sum()
     print(duplicated)
 
@@ -88,6 +87,7 @@ def analizamos_fechas(train_data, test_data, users_data, products_data):
 
 def agrupamos(database, param):
     # Funcion para agrupar en funcion de los clicks count
+    # Se muestra en un diagrama
 
     plt.figure()
     database.groupby(param).click_count.count().plot(kind='bar')
@@ -98,8 +98,7 @@ def agrupamos(database, param):
 
 
 def buscamos_correlacion(input_data):
-
-    # Se busca correlacion en el entrenamiento
+    # Se busca correlacion en el dataset que se pase
     correlation = input_data.corr()
     print(correlation)
 
@@ -108,43 +107,41 @@ def buscamos_correlacion(input_data):
 
 
 
-
-
-
-
-
 def count_click_intervals(database):
+    # EN esta funcion vamos a analizar la cantidad de likes que hay
 
     lenght = database.shape[0]
 
+    # Se calculan los clicks en funcion de los intervalos
     first = len(database[(database.click_count >=0) & (database.click_count < 10)])
     second = len(database[(database.click_count >=10) & (database.click_count < 20)])
     third = len(database[(database.click_count >=20) & (database.click_count < 50)])
     fouth = len(database[(database.click_count >=50) & (database.click_count < 1000)])
     fifth = len(database[(database.click_count >=1000)])
 
+    # Se muestra al usuario
     print('first interval has:', first, first/lenght*100,'%')
     print('second interval has:', second, second/lenght*100,'%')
     print('third interval has:', third, third/lenght*100,'%')
     print('fouth interval has:', fouth, fouth/lenght*100,'%')
     print('fifth interval has:', fifth, fifth/lenght*100,'%')
 
+    # Nos aseguramos que tienen el mismo numero de likes y no nos hemos dejado ninguno
     assert (first+second+third+fouth+fifth == lenght)
     return 0
 
 
 
 
-
-def analizing_train_test_dates(train, test):
+def unique_train_test_dates(train, test):
     # Vamos a ver si son las mismas fechas las de train que las de test, en la publicacion tag_id
     unique_date_train = train['date_tag'].unique()
     unique_date_test = test['date_tag'].unique()
 
+    # Sabemos si tienen la misma longitud
     print('longitud', len(unique_date_train) == len(unique_date_test))
 
     print(unique_date_test,unique_date_train)
-
 
 
 

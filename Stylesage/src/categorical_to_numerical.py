@@ -1,3 +1,5 @@
+# FUnciones para pasar de variables categoricas (segun el tipo de dato) a variables numéricas
+
 import pandas as pd
 import datetime as dt
 from sklearn import preprocessing
