@@ -3,20 +3,22 @@ from src.categorical_to_numerical import *
 from src.load_save_files import *
 from src.merge_datasets import *
 from numpy import arange
+from src.find_outliers import *
 
-def check_nulls(train_data, test_data, users_data, products_data):
+def check_nulls(data):
 
     # Con esta funcion chekeamos si es nulo algún valor
 
     # Vamos a ver los null que hay
-    train_null = train_data.isnull().sum()
-    test_null = test_data.isnull().sum()
-    user_null = users_data.isnull().sum()
-    product_null = products_data.isnull().sum()
+    null = data.isnull().sum()
 
-    # Se obtiene que es nulo en la descripcion del producto (solo)
+    if null.all == 0:
+        print('No hay ningun nulo en el dataset')
 
-    print('train: ', train_null, '\n', 'test: ', test_null, '\n', 'user: ', user_null, '\n', 'product: ', product_null)
+    else:
+        print('Tu base de datos tiene valores nulos:', '\n', null, '\n')
+
+    # Se obtiene que es nulo en la descripcion del producto (solo) y en la info del producto
 
     return 0
 
@@ -35,19 +37,12 @@ def data_shape(train_data, test_data, users_data, products_data):
     return 0
 
 
-def data_description(train_data, test_data, users_data, products_data):
-
-    # MOstramos la descripcion de los databases
+def data_description(database, column):
+    # MOstramos la descripcion de la database con la/las columnas que se pasen
 
     # Vemos la descripcion
-    user_id_describe = users_data['user_id'].describe()
-    print('---User data - user_id describe','\n', user_id_describe, '\n')
-
-    products_id_describe = products_data['product_id'].describe()
-    print('---Product data - product_id describe','\n', products_id_describe, '\n')
-
-    train_tag_id_describe = train_data[['tag_id','post_id', 'product_id', 'user_id', 'date_tag', 'color']].describe()
-    print('---Train data - train_id describe','\n', train_tag_id_describe, '\n')
+    description = database.describe()
+    print('description of the ', column, '\n', description, '\n')
 
     return 0
 
@@ -57,7 +52,11 @@ def data_description(train_data, test_data, users_data, products_data):
 def duplicidades(data, column):
     # vamos a ver las duplicidades para una columna especifica en la base de datos data
     duplicated = data[column].duplicated().sum()
-    print(duplicated)
+
+    if duplicated == 0:
+        print(column, 'column of your data is not duplicated')
+    else:
+        print(column, 'column of your data is duplicated')
 
     return 0
 
@@ -108,7 +107,7 @@ def buscamos_correlacion(input_data):
 
 
 def count_click_intervals(database):
-    # EN esta funcion vamos a analizar la cantidad de likes que hay
+    # EN esta funcion vamos a analizar la cantidad de click counts que hay
 
     lenght = database.shape[0]
 
@@ -136,6 +135,8 @@ def count_click_intervals(database):
     for i in range(0,22,2):
             intervalos_valores.append(len(database[(database.click_count >=i) & (database.click_count < (i+2))]))
 
+
+    # Mostramos las distribuciones de muestras
 
     plt.figure(2)
     plt.plot(x)
@@ -170,6 +171,9 @@ def unique_train_test_dates(train, test):
 
 if __name__ == '__main__':
     train_data, test_data, users_data, products_data = read_data()
+
+    data_description(train_data, 'click_count')
+
     # train_mod, test_mod = read_modified_db()
 
     # buscamos_correlacion(train_data, test_data, users_data, products_data)
@@ -182,8 +186,6 @@ if __name__ == '__main__':
     # new_testing.to_csv('./Exercise/testing_modified.csv', sep=';')
     # new_training.to_csv('./Exercise/training_modified.csv', sep=';')
 
-    # Con los nuevos datasets mezclados vamos a ver si hay algun valor nulo:
-    # check_nulls(train_data, test_data, users_data, products_data)
 
     # Duplicidades:
     # duplicidades(train_data, 'tag_id')
@@ -194,14 +196,14 @@ if __name__ == '__main__':
     # agrupamos(train_mod, 'product_brand')
 
     # COntamos los intervalos de clicks que hay
-    count_click_intervals(train_data)
+    # count_click_intervals(train_data)
 
     # train_mod['product_brand'] = dummies_labelEncoder(train_mod.product_brand)
     # train_mod['country'] = dummies_labelEncoder(train_mod.country)
 
     # print(train_mod.head)
 
-    #buscamos correlacion
+    # buscamos correlacion
     # print(train_mod[['product_brand','country', 'date_tag', 'date_joined']].describe())
 
 
@@ -230,6 +232,5 @@ if __name__ == '__main__':
     # Guardamos los nuevos train, test en csv
     # save_new_subset(train_data,'trainining_modified_dummies')
     # save_new_subset(test_data,'testing_modified_dummies')
-
 
     print('hola')
