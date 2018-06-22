@@ -11,6 +11,6 @@ def read_data(path = './', name='train.csv'):
 
 
 if __name__ == '__main__':
-    train = read_data('./', 'trainining_modified_dummies.csv')
+    train = read_data('../assets/', 'trainining_modified_dummies.csv')
 
     buscamos_correlacion(train)

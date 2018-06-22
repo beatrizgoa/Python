@@ -8,7 +8,7 @@ def read_data():
 
     # Leemos los datos y mostramos la cabecera para examinarlos
 
-    path = './Exercise/'
+    path = '../assets/'
 
     train_data = pd.read_csv(path+"train.csv",delimiter=';', sep='delimiter')
     print('-----train data ----')
@@ -34,7 +34,7 @@ def read_modified_db():
 
     # En esta funcion leemos los archivos de train y test modificados
 
-    path = './Exercise/'
+    path = '../assets/'
 
     train_data = pd.read_csv(path+"training_modified.csv",delimiter=';', sep='delimiter')
     print('-----train data ----')
@@ -232,7 +232,7 @@ def analizing_train_test_dates(train, test):
 
 
 def save_new_subset(subset,name):
-    subset.to_csv('./' +name+ '.csv', sep=';')
+    subset.to_csv('../assets/' +name+ '.csv', sep=';')
     return 0
 
 

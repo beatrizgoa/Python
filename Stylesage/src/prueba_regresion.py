@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score
 
-def read_data(path = './Exercise/'):
+def read_data(path = '../assets/'):
     print('......leyendo datos')
     train = pd.read_csv(path+'trainining_modified_dummies.csv',delimiter=';', sep='delimiter')
     # train['date_tag'] = pd.to_datetime(train['date_tag'])
