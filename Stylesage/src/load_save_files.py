@@ -40,15 +40,15 @@ def read_modified_db():
 
     path = '../assets/'
 
-    train_data = pd.read_csv(path+"training_modified.csv",delimiter=';', sep='delimiter')
+    train_data = pd.read_csv(path+"trainining_modified_dummies.csv",delimiter=';', sep='delimiter')
     print('-----train data ----')
     print(train_data.head(), '\n')
 
-    test_data = pd.read_csv(path+"testing_modified.csv",delimiter=';', sep='delimiter')
+    test_data = pd.read_csv(path+"testing_modified_dummies.csv",delimiter=';', sep='delimiter')
     print('-----test data ----')
     print(test_data.head(), '\n')
 
-    print(train_data[['product_brand','country', 'date_tag', 'date_joined']].describe())
+    # print(train_data[['product_brand','country', 'date_tag', 'date_joined']].describe())
 
     return train_data, test_data
 

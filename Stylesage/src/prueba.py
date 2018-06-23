@@ -4,6 +4,7 @@ from src.load_save_files import *
 from src.merge_datasets import *
 from numpy import arange
 from src.find_outliers import *
+import numpy as np
 
 def check_nulls(data):
 
@@ -11,8 +12,13 @@ def check_nulls(data):
 
     # Vamos a ver los null que hay
     null = data.isnull().sum()
+    aux = 0
+    for i in null.values:
+        if i != 0:
+            aux = 1
+            continue
 
-    if null.all == 0:
+    if aux == 0:
         print('No hay ningun nulo en el dataset')
 
     else:
@@ -62,23 +68,22 @@ def duplicidades(data, column):
 
 
 
-def analizamos_fechas(train_data, test_data, users_data, products_data):
+def analizamos_fechas(users_data, train_data):
 
     ## Vamos a ver las fechas de los test
-    print(users_data.date_joined.min())
+    print('USUARIOS: Fecha maxima:,', users_data.date_joined.min(), 'Fecha minima:', users_data.date_joined.max(), 'cantidad de fechas unicas', len(users_data['date_joined'].unique()))
+    print('TRAIN: Fecha maxima:,', train_data.date_tag.min(), 'Fecha minima:', train_data.date_tag.max(), 'cantidad de fechas unicas', len(train_data['date_tag'].unique()))
 
     # Vamos a mostrar: los usuarios por fecha
     # prirmero tenemos quee contar los usuarios en cada fecha
-    users_date_joined = users_data.groupby('date_joined').user_id.count()# .plot(kind='bar')
-    print(users_date_joined.min())
-    #plt.show()
-
-    # Vamos a mostrar en el subset de train por fecha
-    train_date_tag = train_data.groupby('date_tag').count()
-    #print('PRINT TRAIN DATE TAG:','\n', train_date_tag)
-
-    duplicated_train = train_data.duplicated()
-    #print(duplicated_train.sum()) # el resultado es 0
+    plt.figure()
+    plt.subplot(211)
+    users_date_joined = users_data.groupby('date_joined').user_id.count().plot(kind='bar')
+    plt.ylabel('number of users')
+    plt.subplot(212)
+    train_date_tag = train_data.groupby('date_tag').tag_id.count().plot(kind='bar')
+    plt.ylabel('number of tags_id')
+    plt.show()
 
     return 0
 
@@ -232,5 +237,9 @@ if __name__ == '__main__':
     # Guardamos los nuevos train, test en csv
     # save_new_subset(train_data,'trainining_modified_dummies')
     # save_new_subset(test_data,'testing_modified_dummies')
+
+    # analizamos_fechas(users_data, train_data)
+
+    check_nulls(products_data)
 
     print('hola')

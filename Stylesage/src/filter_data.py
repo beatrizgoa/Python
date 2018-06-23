@@ -1,4 +1,4 @@
-# En este archivo de python filtro los row datos
+# En este archivo de python filtro los row datos y se selecionan las features para la psoterios classificacion
 
 from src.load_save_files import *
 from src.categorical_to_numerical import *
@@ -61,5 +61,6 @@ if __name__ == '__main__':
     plt.subplot(224)
     plt.plot(group_date)
     plt.xlabel('date tag')
-
     plt.show()
+
+    # Random forest

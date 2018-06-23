@@ -41,7 +41,24 @@ if __name__ == '__main__':
     data_description(train_data, 'click_count')
 
     # Vamos a ver la distribucion de los clicks counts
-    count_click_intervals(train_data) # La mayoria de los psot solo tienen 1 click, lugo le sigue los que tienen 0 clicks
+    count_click_intervals(train_data) # La mayoria de los post solo tienen 1 click, lugo le sigue los que tienen 0 clicks
     # Por ahora no podemos decir que hay outliers
 
+
+    # Vamos a ver el rango de fechas de los productos, tags y usuarios
+    analizamos_fechas(users_data, train_data)
+
+    """
+    USUARIOS: Fecha maxima:, 2016-01-21 Fecha minima: 2017-06-30 cantidad de fechas unicas 522
+    TRAIN: Fecha maxima:, 2017-04-23 Fecha minima: 2017-06-19 cantidad de fechas unicas 58
     
+    Los usuarios crecen con el tiempo. Es en las ultimas fechas cuando mas usuarios se regristran    
+    """
+
+    # cuantos usuarios unicos hay en el entrenamiento subset?
+    print('La cantidad de usuarios unicos es:', len(train_data['user_id'].unique()))
+
+
+
+
+
