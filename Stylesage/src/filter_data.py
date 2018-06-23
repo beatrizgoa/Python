@@ -5,7 +5,9 @@ from src.categorical_to_numerical import *
 from src.merge_datasets import *
 from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
-from src.prueba import *
+from src.analizing_data_functions import *
+
+
 
 if __name__ == '__main__':
     # primero obtenemos los row data

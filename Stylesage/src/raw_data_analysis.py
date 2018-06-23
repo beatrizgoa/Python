@@ -1,7 +1,7 @@
 # En este archivo de python se va a analizar los datasets proporcionados
 
 from src.load_save_files import *
-from src.prueba import *
+from src.analizing_data_functions import *
 
 if __name__ == '__main__':
 
