@@ -2,22 +2,19 @@
 from matplotlib import pyplot as plt
 from numpy import arange
 
-def check_nulls(data):
+def checkNulls(data, remove = False):
     # Con esta funcion chekeamos si es nulo algún valor
 
     # Vamos a ver los null que hay
     null = data.isnull().sum()
     aux = 0
+
     for i in null.values:
         if i != 0:
-            aux = 1
-            continue
+            print('The database has null values:', '\n', null, '\n')
 
-    if aux == 0:
-        print('No hay ningun nulo en el dataset')
-
-    else:
-        print('Tu base de datos tiene valores nulos:', '\n', null, '\n')
+    if remove == True:
+        data.dropna(axis = 0, inplace = True)
 
     return 0
 
@@ -44,21 +41,14 @@ def data_shape(train_data, test_data, users_data, products_data):
     user_shape = users_data.shape
     products_shape = products_data.shape
 
-    print('train shape', train_shape, 'test shape', test_shape, 'user shape', user_shape, 'product shape', products_shape, '\n')
 
     return 0
 
 
-def duplicidades(data, column):
-    # vamos a ver las duplicidades para una columna especifica en la base de datos data
-    duplicated = data[column].duplicated().sum()
+def removeDuplicated(data):
+    # Remove duplicated rows
+    return data.drop_duplicates(keep='first', inplace=True)
 
-    if duplicated == 0:
-        print(column, 'column of your data is not duplicated')
-    else:
-        print(column, 'column of your data is duplicated')
-
-    return 0
 
 
 

@@ -90,3 +90,4 @@ if __name__ == '__main__':
 
     # Como el id del tag se repite en la correlacion, se puede quitar, ademas que es un valor unico, es como enumerar el train
     # A partir de la correlacion y de random forest tambien podemos quitar user_data_joined
+

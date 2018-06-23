@@ -1,14 +1,23 @@
 # Cargamos datasets en csv format y guardamos data en archivos csv
 import pandas as pd
 
+path = '../assets/'
+
+
+def readCSV (filename):
+    return pd.read_csv(path+filename+'.csv', delimiter=';', sep='delimiter')
+
 
 def read_data():
 
     # Leemos los datos y mostramos la cabecera para examinarlos
-
-    path = '../assets/'
-
     # train data
+    train_data = readCSV('train')
+    test_data = readCSV('test')
+    users_data = readCSV('users')
+    products_data = readCSV('products')
+
+
     train_data = pd.read_csv(path+"train.csv",delimiter=';', sep='delimiter')
     print('-----train data ----')
     print(train_data.head(), '\n')
@@ -55,7 +64,7 @@ def read_modified_db():
 
 
 
-def save_new_subset(subset,name):
+def saveCSV(subset,name):
     # a partir de subset (lo que queremos guardar) y del nombre que le queremos dar (name), creamos un csv nuevo que se guarda en assets
     subset.to_csv('../assets/' +name+ '.csv', sep=';')
     return 0

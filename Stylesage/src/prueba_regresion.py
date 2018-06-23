@@ -4,21 +4,36 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.ensemble import RandomForestRegressor
 from src.load_save_files import *
-from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from numpy import where
+
+
+def randomForest(x_train, y, x_test):
+    # Define the possible number of trees
+    trees = [2,5,10,20,30,40,50,100,150]
+    scores = []
+
+    # Foor loop to generate random forest regression modesl with the different estimators
+    for tree in trees:
+        forest = RandomForestRegressor(n_estimators=tree)
+        scores.append(cross_val_score(forest, x_train, y, cv=5, scoring='neg_mean_squared_error').mean())
+
+    #Get the best number of trees
+    best_tree = trees[scores.index(min(scores))]
+
+    # Train with the best number of trees and predict
+    forest = RandomForestRegressor(n_estimators=best_tree)
+    forest.fit(x_train, y)
+    y_pred = forest.predict(x_test)
+
+    return y_pred
 
 
 
-def random_forest_kfold(x, y):
-    forest = RandomForestRegressor()
-    trees = [2,5,10,20,30,40,50]
-    kf = KFold(n_splits=len(trees))
-
-    for train, test in kf.split(x):
-        print('hola')
 
 
 
-def read_data(path = '../assets/'):
+def readData(path = '../assets/'):
     print('......leyendo datos')
     train = pd.read_csv(path+'trainining_modified_dummies.csv',delimiter=';', sep='delimiter')
     # train['date_tag'] = pd.to_datetime(train['date_tag'])
@@ -30,12 +45,13 @@ def read_data(path = '../assets/'):
 
     print('x head:', '\n', x.head(), '\n')
 
-    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
 
-    return x_train, x_test, y_train, y_test
+    return x, y, test
+
+
 
 def read_split_data(path = '../assets/'):
-    print('......leyendo datos')
+    print('..... reading data')
     train = pd.read_csv(path+'trainining_modified_dummies.csv',delimiter=';', sep='delimiter')
     # train['date_tag'] = pd.to_datetime(train['date_tag'])
     test = pd.read_csv(path+'testing_modified_dummies.csv')
@@ -43,13 +59,14 @@ def read_split_data(path = '../assets/'):
     feature_cols = ['tag_id', 'post_id', 'product_id', 'user_id', 'color', 'date_tag', 'product_brand', 'date_joined', 'country']
     x = train[feature_cols]
     y = train.click_count
+    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
 
 
-    return x, y, test
+    return x_train, x_test, y_train, y_test
 
 
 def train_predict_regression(x_train, x_test, y_train):
-    print('........ regresion logistica')
+    print('........ logistic_regression')
     regresion = LogisticRegression()
     regresion.fit(x_train, y_train)
     pred = regresion.predict(x_test)
@@ -76,7 +93,7 @@ def find_features(X, y, features):
 
 
 def metrics(y_test, y_pred):
-    print('...... calculando metrica')
+    print('...... calculing the results')
 
     RMS = mean_squared_error(y_test, y_pred)
     accuracy = accuracy_score(y_test, y_pred)
@@ -84,10 +101,16 @@ def metrics(y_test, y_pred):
     return RMS, accuracy
 
 
+def savePredictionCSV(y_pred, x_test):
+    df_results = pd.DataFrame(x_test['tag_id'])
+    df_results['click_count'] = y_pred
+
+    saveCSV(df_results, 'results')
+
 
 
 if __name__ == '__main__':
-    x_train, x_test, y_train, y_test = read_data()
+    x_train,  y_train, x_test = readData()
 
     #  y_pred_regression = train_predict_regression(x_train, x_test, y_train)
 
@@ -102,13 +125,13 @@ if __name__ == '__main__':
 
     features = ['post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand']
 
-    forest = find_features(x_train[features], y_train, features)
-    pred = forest.predict(x_test[features])
-    print(mean_squared_error(y_test, pred))
+    y_pred = randomForest(x_train,y_train,x_test)
+
+    savePredictionCSV(y_pred, x_test)
+    # forest = find_features(x_train[features], y_train, features)
+    # pred = forest.predict(x_test[features])
+    # print(mean_squared_error(y_test, pred))
 
 
 
 
-## Podemos mirar en el test las fechas, si son de ahora, intentando quitar los posto viejos que tienen muy pocos likes, que tambine habia muy pocos usuarios. Pero si en el test hay fechas de todos, no
-# MUestra el histograma de los likes
-# Hacer una grafica en funcnion de los likes
