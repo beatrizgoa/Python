@@ -2,6 +2,11 @@
 
 from src.load_save_files import *
 from src.analizing_data_functions import *
+import seaborn as sns
+
+
+
+
 
 if __name__ == '__main__':
 
@@ -28,7 +33,7 @@ if __name__ == '__main__':
     duplicidades(train_data, 'tag_id')   # obtenemos: tag_id column of your data is not duplicated
     duplicidades(users_data, 'user_id') # obtenemos: user_id column of your data is not duplicated
     duplicidades(products_data, 'product_id') # product_id column of your data is not duplicated
-
+    print('\n')
 
     # Vamos a buscar valores nulos:
     check_nulls(train_data) # NO hay valores nulos
@@ -36,6 +41,7 @@ if __name__ == '__main__':
     check_nulls(users_data) # No hay valores nulos
     check_nulls(products_data) # product_info: 443 valores nulos y description: 81381 valores nulos
 
+    print('\n')
 
     # Vamos a ver la descripcion de el numero de clicks en el entrenamiento
     data_description(train_data, 'click_count')
@@ -53,6 +59,10 @@ if __name__ == '__main__':
     
     Los usuarios crecen con el tiempo. Es en las ultimas fechas cuando mas usuarios se regristran    
     """
+
+    # MOstramos distribucion de muestras
+    g = sns.pairplot(train_data[['tag_id',  'post_id',  'product_id',  'user_id', 'click_count']], diag_kind="kde", markers='+')
+    plt.show()
 
     # cuantos usuarios unicos hay en el entrenamiento subset?
     print('La cantidad de usuarios unicos es:', len(train_data['user_id'].unique()))

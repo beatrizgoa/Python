@@ -44,6 +44,8 @@ def data_shape(train_data, test_data, users_data, products_data):
     user_shape = users_data.shape
     products_shape = products_data.shape
 
+    print('train shape', train_shape, 'test shape', test_shape, 'user shape', user_shape, 'product shape', products_shape, '\n')
+
     return 0
 
 

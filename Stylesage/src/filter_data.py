@@ -6,7 +6,16 @@ from src.merge_datasets import *
 from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 from src.analizing_data_functions import *
+import seaborn as sns
+from sklearn.ensemble import RandomForestRegressor
 
+
+def find_features(X, y, features):
+    print('calculing features scores .... ')
+    forest = RandomForestRegressor()
+    forest.fit(X, y)
+    print(sorted(list(zip(forest.feature_importances_, features))))
+    return forest
 
 
 if __name__ == '__main__':
@@ -68,8 +77,16 @@ if __name__ == '__main__':
 
     # La cantidad de marcas en el entrenamiento
     print('La cantidad de marcas unicas es:', len(train_data['product_brand'].unique()))
+    # La cantidad de id_tag unicos
+    print('La cantidad de id post unicas es:',len(train_data['post_id'].unique()))
 
+    sns.pairplot(pd.DataFrame(train_data), y_vars='click_count', x_vars=['product_brand', 'product_id', 'user_id', ])
+    plt.show()
+    # A partir de la grafica se podrian considerar como outliers los tag id cuyos num de clicks estan por encima de 5000
 
     # Random forest para ver las features mas importantes
+    features = ['post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand'] # faltan tag_id, country, user_data joined
+    # forest = find_features(train_data[features], train_data, features)
 
-
+    # Como el id del tag se repite en la correlacion, se puede quitar, ademas que es un valor unico, es como enumerar el train
+    # A partir de la correlacion y de random forest tambien podemos quitar user_data_joined
