@@ -7,7 +7,6 @@ from src.find_outliers import *
 import numpy as np
 
 def check_nulls(data):
-
     # Con esta funcion chekeamos si es nulo algún valor
 
     # Vamos a ver los null que hay
@@ -23,8 +22,6 @@ def check_nulls(data):
 
     else:
         print('Tu base de datos tiene valores nulos:', '\n', null, '\n')
-
-    # Se obtiene que es nulo en la descripcion del producto (solo) y en la info del producto
 
     return 0
 

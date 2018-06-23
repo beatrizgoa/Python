@@ -4,6 +4,7 @@ from src.load_save_files import *
 from src.categorical_to_numerical import *
 from src.merge_datasets import *
 from matplotlib import pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
 from src.prueba import *
 
 if __name__ == '__main__':
@@ -24,10 +25,10 @@ if __name__ == '__main__':
     # add_datasets(train_data, users_data, products_data)
     # add_datasets(test_data, users_data, products_data)
 
-    train, test = read_modified_db()
+    train_data, test_data = read_modified_db()
 
     # correlacion entre variables
-    plt.matshow(train[['tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'click_count', 'product_brand',  'country',  'date_joined' ]].corr())
+    plt.matshow(train_data[['tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'click_count', 'product_brand',  'country',  'date_joined' ]].corr())
     plt.legend()
     plt.xticks(arange(10), ('tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'click_count', 'product_brand',  'country',  'date_joined'))
     plt.yticks(arange(10), ('tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'click_count', 'product_brand',  'country',  'date_joined'))
@@ -41,10 +42,10 @@ if __name__ == '__main__':
 
     # Mostramos en funcion de los likes: la marca, el pais, el color y el date id
     plt.figure()
-    group_brand = agrupamos(train,'product_brand')
-    group_country = agrupamos(train,'country')
-    group_color = agrupamos(train, 'color')
-    group_date = agrupamos(train, 'date_tag')
+    group_brand = agrupamos(train_data,'product_brand')
+    group_country = agrupamos(train_data,'country')
+    group_color = agrupamos(train_data, 'color')
+    group_date = agrupamos(train_data, 'date_tag')
 
     plt.subplot(221)
     plt.plot(group_brand)
@@ -63,4 +64,10 @@ if __name__ == '__main__':
     plt.xlabel('date tag')
     plt.show()
 
-    # Random forest
+    # La cantidad de marcas en el entrenamiento
+    print('La cantidad de marcas unicas es:', len(train_data['product_brand'].unique()))
+
+
+    # Random forest para ver las features mas importantes
+
+

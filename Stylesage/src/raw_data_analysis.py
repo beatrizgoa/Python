@@ -44,7 +44,6 @@ if __name__ == '__main__':
     count_click_intervals(train_data) # La mayoria de los post solo tienen 1 click, lugo le sigue los que tienen 0 clicks
     # Por ahora no podemos decir que hay outliers
 
-
     # Vamos a ver el rango de fechas de los productos, tags y usuarios
     analizamos_fechas(users_data, train_data)
 
