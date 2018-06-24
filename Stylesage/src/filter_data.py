@@ -1,4 +1,4 @@
-# En este archivo de python filtro los row datos y se selecionan las features para la psoterios classificacion
+# filtering data
 
 from src.utils.load_save_files import *
 from src.utils.categorical_to_numerical import *
@@ -17,23 +17,23 @@ def find_features(X, y, features):
 
 
 if __name__ == '__main__':
-    # Read dat
-    # train_data, test_data, users_data, products_data = read_data()
+    # Read data
+    # train_data, test_data, users_data, products_data = readData()
 
     # From categorical variables to numeric variables
-    # products_data['brand_name'] = dummies_labelEncoder(products_data.brand_name)
-    # users_data['country'] = dummies_labelEncoder(users_data.country)
+    # products_data['brand_name'] = dummiesLabelEncoder(products_data.brand_name)
+    # users_data['country'] = dummiesLabelEncoder(users_data.country)
 
     # dates to ordinal numbers
-    # users_data['date_joined'] = time_to_ordinal(users_data['date_joined'])
-    # train_data['date_tag'] = time_to_ordinal(train_data['date_tag'])
-    # test_data['date_tag'] = time_to_ordinal(test_data['date_tag'])
+    # users_data['date_joined'] = timeToOrdinal(users_data['date_joined'])
+    # train_data['date_tag'] = timeToOrdinal(train_data['date_tag'])
+    # test_data['date_tag'] = timeToOrdinal(test_data['date_tag'])
 
     # Add info from users data and products to test and train data
-    # add_datasets(train_data, users_data, products_data)
-    # add_datasets(test_data, users_data, products_data)
+    # addDatasets(train_data, users_data, products_data)
+    # addDatasets(test_data, users_data, products_data)
 
-    train_data, test_data = read_modified_db()
+    train_data, test_data = readMmodifieDB()
 
     # correlacion among variables
     plt.matshow(train_data[['tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'click_count', 'product_brand',  'country',  'date_joined' ]].corr())
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     sns.pairplot(pd.DataFrame(train_data), y_vars='click_count', x_vars=['product_brand', 'product_id', 'user_id', ])
     plt.show()
-    
+
     # It could be considered as outliers the data whose click count is bigger than 5000, and they are removed
     train_data = removeOutliers(train_data)
 

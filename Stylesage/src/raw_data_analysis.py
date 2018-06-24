@@ -1,4 +1,4 @@
-# En este archivo de python se va a analizar los datasets proporcionados
+# Analyzing subsets
 
 from src.utils.load_save_files import *
 from src.utils.analizing_data_functions import *
