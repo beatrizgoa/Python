@@ -1,7 +1,7 @@
 # En este archivo de python se va a analizar los datasets proporcionados
 
-from src.load_save_files import *
-from src.analizing_data_functions import *
+from src.utils.load_save_files import *
+from src.utils.analizing_data_functions import *
 import seaborn as sns
 
 
@@ -10,62 +10,60 @@ import seaborn as sns
 
 if __name__ == '__main__':
 
-    # Cargamos los datasets y mostramos las cabeceras
+    # Load dataser
     train_data, test_data, users_data, products_data = read_data()
 
-    """ VARIABLES NUMERICAS Y CATEGORICAS
-        En train y test tenemos todas las variables numericas menos la fecha
-        En users tenemos data_joined y country como variables no numéricas
-        En producto solo product_id es variable numérica
+    """ Numeric and categorical values
+        train and test: all numerical data but date tag
+        users categorical: data_joined and country
+        products: just product_id is an ordinal variable
     """
 
-    # Vamos a ver la cantidad de datos que tenemos en cada fichero
+    # how many data are
     data_shape(train_data, test_data, users_data, products_data)
 
-    """ TAMANO DE NUESTROS FICHEROS 
+    """ CSV shape 
         Train: 416147
         Test: 46239
         Usuario: 68819
         Producto: 309961
     """
 
-    # Nuestros usuarios, productos y tag son unicos:
-    duplicidades(train_data, 'tag_id')   # obtenemos: tag_id column of your data is not duplicated
-    duplicidades(users_data, 'user_id') # obtenemos: user_id column of your data is not duplicated
-    duplicidades(products_data, 'product_id') # product_id column of your data is not duplicated
-    print('\n')
+    # Users, products and tag are unique:
+    removeDuplicated(train_data)   # obtenemos: tag_id column of your data is not duplicated
+    removeDuplicated(users_data) # obtenemos: user_id column of your data is not duplicated
+    removeDuplicated(products_data) #
 
-    # Vamos a buscar valores nulos:
-    check_nulls(train_data) # NO hay valores nulos
-    check_nulls(test_data) # No hay valores nulos
-    check_nulls(users_data) # No hay valores nulos
-    check_nulls(products_data) # product_info: 443 valores nulos y description: 81381 valores nulos
+    # Null values
+    checkNulls(train_data, remove= False) # No null values
+    checkNulls(test_data, remove= False) # No null values
+    checkNulls(users_data, remove= False) # No null values
+    checkNulls(products_data, remove= False) # product_info: 443 null values and description: 81381 null values
 
-    print('\n')
 
-    # Vamos a ver la descripcion de el numero de clicks en el entrenamiento
+    # cluck count description
     data_description(train_data, 'click_count')
 
-    # Vamos a ver la distribucion de los clicks counts
-    count_click_intervals(train_data) # La mayoria de los post solo tienen 1 click, lugo le sigue los que tienen 0 clicks
-    # Por ahora no podemos decir que hay outliers
+    # click count distribution
+    count_click_intervals(train_data) # Most of tag id have only 1 click, then 0 clicks
+    # It is not possible detecting outliers by the moment
 
-    # Vamos a ver el rango de fechas de los productos, tags y usuarios
-    analizamos_fechas(users_data, train_data)
+    # analize the data tange in users and train
+    dateAnalyzing(users_data, train_data)
 
     """
-    USUARIOS: Fecha maxima:, 2016-01-21 Fecha minima: 2017-06-30 cantidad de fechas unicas 522
-    TRAIN: Fecha maxima:, 2017-04-23 Fecha minima: 2017-06-19 cantidad de fechas unicas 58
+    USUARIOS: maxim date:, 2016-01-21 minim date: 2017-06-30 unique dates 522
+    TRAIN: maxim date:, 2017-04-23 minim date:: 2017-06-19 unique dates 58
     
-    Los usuarios crecen con el tiempo. Es en las ultimas fechas cuando mas usuarios se regristran    
+    Number of users increases with the time. las few dates i where the number of new users is widely higher     
     """
 
-    # MOstramos distribucion de muestras
+    # Msample distribution
     g = sns.pairplot(train_data[['tag_id',  'post_id',  'product_id',  'user_id', 'click_count']], diag_kind="kde", markers='+')
     plt.show()
 
-    # cuantos usuarios unicos hay en el entrenamiento subset?
-    print('La cantidad de usuarios unicos es:', len(train_data['user_id'].unique()))
+    # cHow many unique users are in the training subset?
+    print('The number of unique users are:', len(train_data['user_id'].unique()))
 
 
 

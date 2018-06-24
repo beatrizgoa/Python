@@ -1,8 +1,5 @@
-from src.categorical_to_numerical import *
-from src.load_save_files import *
-from src.merge_datasets import *
-from src.find_outliers import *
-from src.analizing_data_functions import *
+from src.utils.load_save_files import *
+from src.utils.analizing_data_functions import *
 
 
 
@@ -16,6 +13,11 @@ if __name__ == '__main__':
 
     data_description(train_data, 'click_count')
 
+    shape1 = train_data.shape
+    train_data = train_data[train_data.click_count < 5000]
+    shape2 = train_data.shape
+
+    print(shape1, shape2)
     # train_mod, test_mod = read_modified_db()
 
     # buscamos_correlacion(train_data, test_data, users_data, products_data)
@@ -77,6 +79,6 @@ if __name__ == '__main__':
 
     # analizamos_fechas(users_data, train_data)
 
-    check_nulls(products_data)
+    checkNulls(products_data)
 
     print('hola')

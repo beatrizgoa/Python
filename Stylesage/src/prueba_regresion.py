@@ -3,12 +3,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.ensemble import RandomForestRegressor
-from src.load_save_files import *
+from src.utils.load_save_files import *
 from sklearn.model_selection import cross_val_score
-from numpy import where
 
 
 def randomForest(x_train, y, x_test):
+
     # Define the possible number of trees
     trees = [2,5,10,20,30,40,50,100,150]
     scores = []
@@ -20,33 +20,18 @@ def randomForest(x_train, y, x_test):
 
     #Get the best number of trees
     best_tree = trees[scores.index(min(scores))]
+    print(best_tree, scores)
 
     # Train with the best number of trees and predict
     forest = RandomForestRegressor(n_estimators=best_tree)
     forest.fit(x_train, y)
+
     y_pred = forest.predict(x_test)
 
     return y_pred
 
 
 
-
-
-
-def readData(path = '../assets/'):
-    print('......leyendo datos')
-    train = pd.read_csv(path+'trainining_modified_dummies.csv',delimiter=';', sep='delimiter')
-    # train['date_tag'] = pd.to_datetime(train['date_tag'])
-    test = pd.read_csv(path+'testing_modified_dummies.csv')
-
-    feature_cols = ['tag_id', 'post_id', 'product_id', 'user_id', 'color', 'date_tag', 'product_brand', 'date_joined', 'country']
-    x = train[feature_cols]
-    y = train.click_count
-
-    print('x head:', '\n', x.head(), '\n')
-
-
-    return x, y, test
 
 
 
