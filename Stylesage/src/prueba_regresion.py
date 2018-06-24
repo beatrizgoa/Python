@@ -2,7 +2,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.ensemble import RandomForestRegressor
-from src.utils.load_save_files import *
+from src.loadSave.saveCSV import *
 from sklearn.model_selection import cross_val_score
 
 
