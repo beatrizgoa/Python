@@ -1,4 +1,3 @@
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import mean_squared_error, accuracy_score
@@ -8,18 +7,19 @@ from sklearn.model_selection import cross_val_score
 
 
 def randomForest(x_train, y, x_test):
-
+    print('.....working random forest')
     # Define the possible number of trees
     trees = [2,5,10,20,30,40,50,100,150]
     scores = []
 
     # Foor loop to generate random forest regression modesl with the different estimators
     for tree in trees:
+        print('tree')
         forest = RandomForestRegressor(n_estimators=tree)
-        scores.append(cross_val_score(forest, x_train, y, cv=5, scoring='neg_mean_squared_error').mean())
+        scores.append(cross_val_score(forest, x_train, y, cv=3, scoring='neg_mean_squared_error').mean())
 
     #Get the best number of trees
-    best_tree = trees[scores.index(min(scores))]
+    best_tree = trees[scores.index(max(scores))]
     print(best_tree, scores)
 
     # Train with the best number of trees and predict
@@ -31,23 +31,6 @@ def randomForest(x_train, y, x_test):
     return y_pred
 
 
-
-
-
-
-def read_split_data(path = '../assets/'):
-    print('..... reading data')
-    train = pd.read_csv(path+'trainining_modified_dummies.csv',delimiter=';', sep='delimiter')
-    # train['date_tag'] = pd.to_datetime(train['date_tag'])
-    test = pd.read_csv(path+'testing_modified_dummies.csv')
-
-    feature_cols = ['tag_id', 'post_id', 'product_id', 'user_id', 'color', 'date_tag', 'product_brand', 'date_joined', 'country']
-    x = train[feature_cols]
-    y = train.click_count
-    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
-
-
-    return x_train, x_test, y_train, y_test
 
 
 def train_predict_regression(x_train, x_test, y_train):
@@ -95,7 +78,7 @@ def savePredictionCSV(y_pred, x_test):
 
 
 if __name__ == '__main__':
-    x_train,  y_train, x_test = readData()
+    x_train,  y_train, x_test = readTrainTestData()
 
     #  y_pred_regression = train_predict_regression(x_train, x_test, y_train)
 
@@ -108,9 +91,9 @@ if __name__ == '__main__':
     # print('Regression results:', result_reg, accuracy_reg)
     # print('Dec. Tree results;', result_tree, accuracy_tree)
 
-    features = ['post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand']
+    features = ['tag_id', 'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand']
 
-    y_pred = randomForest(x_train,y_train,x_test)
+    y_pred = randomForest(x_train[features],y_train,x_test[features])
 
     savePredictionCSV(y_pred, x_test)
     # forest = find_features(x_train[features], y_train, features)
