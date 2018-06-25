@@ -42,3 +42,36 @@ def groupBySubplots(group_brand, group_country, group_color, group_date):
     plt.show()
 
     return 0
+
+
+
+def twoGroupedSubplot(data1, data2, data1_label = None, data2_label = None):
+
+    plt.figure()
+    plt.subplot(211)
+    users_date_joined =data1.plot(kind='bar')
+    plt.ylabel(data1_label)
+    plt.subplot(212)
+    train_date_tag = data2.plot(kind='bar')
+    plt.ylabel(data2_label)
+    plt.show()
+
+
+
+
+def twoSimpleSubplot(data1, data2, data1_xticks = None, data2_xticks = None, data1_label = None, data2_label = None):
+    plt.figure(1)
+    plt.subplot(211)
+    plt.plot(data1)
+    plt.xticks(data1_xticks[0], data1_xticks[1])
+    plt.xlabel(data1_label)
+
+
+    plt.subplot(212)
+    plt.plot(data2[0],data2[1])
+    plt.xticks(data2_xticks)
+    plt.xlabel(data2_label)
+
+    plt.show()
+
+    return 0

@@ -3,7 +3,6 @@
 
 ## Project directory structure
 The project is formed by the following files and folders:
-* env: the used python environment
 * requirements.txt
 * assest: Where the original csv files are saved.
 * src: where the code is, and has the following structure
@@ -24,7 +23,7 @@ The project is formed by the following files and folders:
             * normalize.py
             * removeOutliers.py
     * estimation
-            * estimation.py
+        * estimation.py
     * main.py
 
 
@@ -36,11 +35,15 @@ The project has been presented as a regression one. The main.py file runs the fu
 
 * For analyzing the data, the code follows in the same rawDataAnalysis.py python file. The click count description is obtained, as well as the click count distribution, the most of the tag_id has 0 or 1 click, and just a few numbers of samples are higher than 1000 clicks. Then, the date is observed, the number of new users increases exponentially in the lasts days. The training and the testing dates are in the same range. 
 
-* The following step starts in the filterData.py, where first: the 'brand_name' from products, 'country' and 'date joined' from users and 'date_tag' from train and test subsets is transformed into numeric values. Then, 'brand name', 'country' and 'users' values are added to the training and test subsets.
+* The following step starts in the filterData.py, where first: the 'brand_name' from products, 'country' and 'date joined' from users and 'date_tag' from train and test subsets is transformed into numeric values. Then, 'brand name', 'country' and 'users' values are added to the training and test subsets. This part of the code takes some time running.
 
-* In the same function (filterData.py), to visualize the new data, a correlation matrix is plotted and we can see the date of the user joining and the user id are correlated, id_tag and date post are correlated and id_tag and id_post. Also is visualized the number of clicks in function of the brand, country, color and date. After the analysis, the data wich click counts are higher than 1000 is considered outliers and they are removed. The following columns are normalized in order to have normalized values: 'tag_id', 'post_id', 'product_id' and 'user_id'. The code in filterData function ends here.
+* In the same function (filterData.py), to visualize the new data, a correlation matrix is plotted and we can see the date of the user joining and the user id are correlated, id_tag and date post are correlated and id_tag and id_post. Also is visualized the number of clicks in function of the brand, country, color and date. 
 
-* In stimating.py python file, the task continues, now, is analyzed the importance of each feature using random forest regressor, the features are selected and used to train a random forest classifier. It is searched the best number of trees of the estimation task and then, the classifier object is trained again with the best number of trees and test data is predicted and saved as asked.
+* After the analysis, the data wich click counts are higher than 1000 is considered outliers and they are removed. The following columns are normalized in order to have normalized values: 'tag_id', 'post_id', 'product_id', 'user_id' and 'product brand'. From this process a warning pops out (the code continue working and running). The filterData function ends here.
+
+* In stimating.py python file, the task continues in the main function trainPredict(), where, first, the importance of each feature is analyzed using random forest regressor. From this analysis and the previous ones, the columns that are going to be used are: 'tag_id', 'post_id',  'product_id' and  'user_id'.
+
+* The selected features are used to train a random forest classifier. It is searched the best number of trees of the estimation task and then, the classifier object is trained again with the best number of trees and test data is predicted and saved as asked.
 
 * The main.py file is the one which has to be executed because the rest of the code id called from that file.
 

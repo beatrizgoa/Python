@@ -16,7 +16,10 @@ def analysisData(train_data, test_data, users_data, products_data):
     """
 
     # how many data are
-    data_shape(train_data, test_data, users_data, products_data)
+    dataShape(train_data)
+    dataShape(test_data)
+    dataShape(users_data)
+    dataShape(products_data)
 
     """ CSV shape 
         Train: 416147

@@ -1,9 +1,9 @@
 # EN este fichero hay funciones que se van a utilizar para eralizar el analisis de los datos
-from matplotlib import pyplot as plt
 from numpy import arange
+from src.visualizations import visualization
 
 def checkNulls(data, remove = False):
-    # Con esta funcion chekeamos si es nulo algún valor
+    # with this function, the null values are cheked and remove if is desired
 
     # Vamos a ver los null que hay
     null = data.isnull().sum()
@@ -11,7 +11,11 @@ def checkNulls(data, remove = False):
 
     for i in null.values:
         if i != 0:
-            print('The database has null values:', '\n', null, '\n')
+            aux = 1
+            continue
+
+    if aux == 1:
+        print('The database has null values:', '\n', null, '\n')
 
     if remove == True:
         data.dropna(axis = 0, inplace = True)
@@ -21,9 +25,8 @@ def checkNulls(data, remove = False):
 
 
 def dataDescription(database, column):
-    # MOstramos la descripcion de la database con la/las columnas que se pasen
 
-    # Vemos la descripcion
+    # Vshow description
     description = database.describe()
     print('description of the ', column, '\n', description, '\n')
 
@@ -31,17 +34,10 @@ def dataDescription(database, column):
 
 
 
-def data_shape(train_data, test_data, users_data, products_data):
+def dataShape(data):
 
-    # Para ver la cantidad de datos que hay
-
-    # vamos con el tamaño de los datasets
-    train_shape = train_data.shape
-    test_shape = test_data.shape
-    user_shape = users_data.shape
-    products_shape = products_data.shape
-
-
+    # To know the sape of the dataset
+    data_shape = data.shape
     return 0
 
 
@@ -58,15 +54,7 @@ def dateAnalyzing(users_data, train_data):
     print('USERS: max date:,', users_data.date_joined.min(), 'min date:', users_data.date_joined.max(), 'number of unique dates', len(users_data['date_joined'].unique()))
     print('TRAIN: max date:,', train_data.date_tag.min(), 'min date:', train_data.date_tag.max(), 'number of unique dates', len(train_data['date_tag'].unique()))
 
-    # show users by date
-    plt.figure()
-    plt.subplot(211)
-    users_date_joined = users_data.groupby('date_joined').user_id.count().plot(kind='bar')
-    plt.ylabel('number of users')
-    plt.subplot(212)
-    train_date_tag = train_data.groupby('date_tag').tag_id.count().plot(kind='bar')
-    plt.ylabel('number of tags_id')
-    plt.show()
+    visualization.twoGroupedSubplot(users_data.groupby('date_joined').user_id.count(), train_data.groupby('date_tag').tag_id.count() ,  data1_label = 'numer of users', data2_label ='number tag id' )
 
     return 0
 
@@ -75,9 +63,7 @@ def dateAnalyzing(users_data, train_data):
 def grouping(database, param):
     # funtion to group by click count data
 
-    # plt.figure()
     group = database.groupby(param).click_count.count()# .plot(kind='bar')
-    # plt.show()
 
     return group
 
@@ -118,20 +104,8 @@ def countClickIntervals(database):
 
     # PLot distribution samples
 
-    plt.figure(1)
-    plt.plot(x)
-    plt.xticks(arange(5), ('0-10', '10-20', '20-50', '50-100', '>1000'))
-    plt.xlabel('click counts')
+    visualization.twoSimpleSubplot(data1 = x, data2 = [arange(0, 22, step=2), intervalos_valores], data1_xticks = [arange(5), ('0-10', '10-20', '20-50', '50-100', '>1000')],data2_xticks= arange(22, step=2),data1_label = 'click counts', data2_label ='click counts')
 
-
-    plt.figure(2)
-    plt.plot(arange(0, 22, step=2),intervalos_valores)
-    plt.xticks(arange(22, step=2))
-    plt.xlabel('click counts')
-
-    plt.show()
-
-    return 0
 
 
 

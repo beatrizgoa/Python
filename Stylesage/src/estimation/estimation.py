@@ -3,9 +3,9 @@ from sklearn.model_selection import cross_val_score
 
 
 def randomForest(x_train, y, x_test):
-    print('.....working random forest')
+
     # Define the possible number of trees
-    trees = [2,5,10,20,30,]#40,50,100,150]
+    trees = [2 ,5,10,20,30,40,50,100,150]
     scores = []
 
     # Foor loop to generate random forest regression modesl with the different estimators
@@ -36,10 +36,12 @@ def optimVariables(X, y, features):
 
 
 
+
+
 def trainPredict(train, test):
 
     # Get the importance of variables
-    features = ['tag_id', 'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand']
+    features = ['tag_id',  'post_id',  'product_id',  'user_id',  'date_tag',  'color', 'product_brand',  'country',  'date_joined']
     x = train[features]
     y = train['click_count']
     test = test[features]
@@ -47,8 +49,7 @@ def trainPredict(train, test):
     forest, feat_score = optimVariables(train[features], y, features)
     print('FEAT SCORE', list(feat_score))
 
-    features= ['tag_id', 'post_id',  'product_id',  'user_id', 'product_brand']
+    new_features= ['tag_id', 'post_id',  'product_id',  'user_id', 'product_brand']
 
-    y_pred = randomForest(x[features], y, test[features])
-
+    y_pred = randomForest(x[new_features], y, test[new_features])
     return y_pred
